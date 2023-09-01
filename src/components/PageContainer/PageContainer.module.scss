@@ -1,0 +1,26 @@
+.pageContainer {
+  width: 100%;
+  padding: 0px;
+  margin: 0px;
+  // background-color: #fff;
+  // background-color: black;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+
+  .header {
+    width: 100%;
+    position: fixed;
+    top: 0rem;
+    z-index: 1000;
+    max-width: 1920px;
+    height: var(--topNavbarHeight);
+  }
+  .children {
+    min-height: calc(100dvh - var(--topNavbarHeight));
+    width: 100%;
+    z-index: 10;
+    margin-top: var(--topNavbarHeight);
+  }
+}

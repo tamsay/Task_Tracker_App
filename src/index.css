@@ -1,0 +1,87 @@
+@font-face {
+  font-family: "AirbnbCerealBold";
+  src: local("AirbnbCerealBold"), url("./assets/fonts/AirbnbCereal-Bold.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "AirbnbCerealRegular";
+  src: local("AirbnbCerealRegular"), url("./assets/fonts/AirbnbCereal-Regular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "AirbnbCerealLight";
+  src: local("AirbnbCereal"), url("./assets/fonts/AirbnbCereal-Light.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "AirbnbCerealMedium";
+  src: local("AirbnbCerealMedium"), url("./assets/fonts/AirbnbCereal-Medium.ttf") format("truetype");
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: AirbnbCerealRegular, Arial, Helvetica, sans-serif;
+}
+
+#root {
+  width: 100%;
+}
+
+body {
+  font-family: AirbnbCerealRegular, Arial, Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  max-width: 1920px;
+  min-height: 100vh;
+  width: 100%;
+  margin: 0 auto;
+  overflow-x: hidden;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  border-radius: 12px;
+  background-color: #fff0;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  background-color: #06b9c6;
+}
+
+::-webkit-scrollbar-track {
+  border-radius: 12px;
+  background-color: #fff0;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  border: 1px solid none;
+  -webkit-text-fill-color: var(--primaryTextColor);
+  -webkit-box-shadow: 0 0 0 30px white inset;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+button:disabled,
+button[disabled] {
+  background-color: var(--green9Color);
+  color: white;
+  cursor: not-allowed;
+  border: none;
+  pointer-events: none;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}

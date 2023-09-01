@@ -1,0 +1,66 @@
+:root {
+  --topNavbarHeight: 5rem;
+  --primaryColor: #2dc86d;
+
+  --white1: #fff;
+
+  --gray1: #57575b;
+  --gray2: #e6e6e6;
+  --gray3: #aea4bf;
+  --gray4: #e0e0e0;
+  --gray5: #f8f9fa;
+  --gray6: #04041514;
+  --gray7: #f4f5f6;
+  --gray8: #9d9d9d;
+  --gray9: #acacac;
+  --gray10: #bdbdbd;
+
+  --black1: #000000;
+  --black2: #030309;
+  --black3: #222222;
+  --black4: #141414;
+  --black5: #0d0f11;
+  --black6: #040415;
+  --black7: #313131;
+
+  --red1: #cc000e;
+  --red2: #ff5964;
+  --red3: #db504a;
+
+  --green2: #058b94;
+  --green3: #f7feff;
+  --green4: #e6fdfe;
+  --green5: #cefafd;
+  --green6: #e7f5f8;
+  --green7: #08323b;
+  --green8: #023c40;
+  --green9: #058a9499;
+
+  --gold1: #996a13;
+  --orange1: #ffecb2;
+
+  // Fonts
+  --bold: AirbnbCerealBold;
+  --light: AirbnbCerealLight;
+  --medium: AirbnbCerealMedium;
+  --regular: AirbnbCerealRegular;
+
+  // Primary Button Big
+  --primaryBtnBg: var(--primaryColor);
+  --primaryBtnTextColor: var(--white1);
+  --primaryBtnBorderColor: var(--primaryColor);
+  --primaryBtnHoverBg: var(--green7);
+  --primaryBtnHoverTextColor: var(--white1);
+  --primaryBtnHoverBorderColor: var(--green7);
+
+  // Secondary Button Big
+  --secondaryBtnBg: var(--white1);
+  --secondaryBtnTextColor: var(--primaryColor);
+  --secondaryBtnBorderColor: var(--primaryColor);
+  --secondaryBtnHoverBg: var(--primaryColor);
+  --secondaryBtnHoverTextColor: var(--white1);
+  --secondaryBtnHoverBorderColor: var(--white1);
+
+  // Toast
+  --toastify-color-success: var(--primaryColor);
+}
