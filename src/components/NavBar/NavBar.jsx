@@ -8,7 +8,7 @@ import { Icon } from "@iconify/react";
 import styles from "./NavBar.module.scss";
 
 import Button from "@/components/Button/Button";
-import TestModal from "@/components/Modals/TestModal/TestModal";
+import CreateTaskModal from "@/components/Modals/CreateTask/CreateTask";
 
 import { hideModal, showModal } from "@/redux/Modal/ModalSlice";
 
@@ -23,8 +23,8 @@ const NavBar = () => {
   console.log("displayModal", displayModal);
   console.log("modalName", modalName);
 
-  const handleTestModal = () => {
-    dispatch(showModal({ modalData: {}, name: "testModal" }));
+  const handleCreateTaskModal = () => {
+    dispatch(showModal({ modalData: {}, name: "createTask" }));
   };
 
   return (
@@ -42,10 +42,10 @@ const NavBar = () => {
           <Nav className={cx(styles.primaryNavigation, "flexRow-space-between")}>
             {/* <NavLink  className={(navData) => navData.isActive && cx(styles.active)} end to="/"><Icon icon="cil:home" width={16} /> Home</NavLink>      
             <NavLink  className={(navData) => navData.isActive && cx(styles.active)} to="/products"><Icon icon="ph:film-slate-thin" width={16} /> Products</NavLink> */}
-            <Button className={cx(styles.navButton)} title='Create Task' onClick={() => handleTestModal()} />
+            <Button className={cx(styles.navButton)} title='Create Task' onClick={() => handleCreateTaskModal()} />
           </Nav>
         </Navbar.Collapse>
-        {displayModal && modalName === "testModal" ? <TestModal show size='md' /> : null}
+        {displayModal && modalName === "createTask" ? <CreateTaskModal show size='md' /> : null}
       </Navbar>
     </>
   );

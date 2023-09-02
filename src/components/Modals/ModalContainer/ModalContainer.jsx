@@ -20,6 +20,7 @@ const ModalContainer = ({ children, show, size = "md", modalName }) => {
           centered
           size={size}
           dialogClassName='generic-modal-wrapper'
+          backdrop='static'
         >
           <Modal.Body className='generic-modal-body'>{children}</Modal.Body>
         </Modal>

@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 
 import styles from "./HomePage.module.scss";
 
-import TestModal from "@/components/Modals/TestModal/TestModal";
+import TestModal from "@/components/Modals/CreateTask/CreateTask";
 import TaskList from "@/components/TaskList/TaskList";
 
 import { hideModal, showModal } from "@/redux/Modal/ModalSlice";
