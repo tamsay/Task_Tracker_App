@@ -30,6 +30,9 @@ const ConfirmationDialog = ({ show, size }) => {
       case "markTaskAsUncomplete":
         response = await dispatch(updateTaskStatus({id: payload, status: "uncompleted"}));
         break;
+        case "resetApp":
+          localStorage.clear();
+    window.location.reload();
       default:
         break;
     }

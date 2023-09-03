@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Nav, Navbar } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
@@ -14,7 +14,15 @@ import { showModal } from "@/redux/Modal/ModalSlice";
 const NavBar = () => {
   const dispatch = useDispatch();
 
+  const [expanded, setExpanded] = useState(false);
+
+  const handleToggle = () => {
+    setExpanded(!expanded);
+  };
+
   const displayCreateModal = () => {
+    setExpanded(false);
+
     dispatch(
       showModal({
         modalData: {
@@ -26,13 +34,29 @@ const NavBar = () => {
     );
   };
 
+  const handleResetApp = () => {
+    setExpanded(false);
+
+    // display confirmation dialog
+    dispatch(
+      showModal({
+        modalData: {
+          action: "resetApp",
+          title: "Reset App",
+          message: "Are you sure you want to reset the app?"
+        },
+        name: "confirmationDialog"
+      })
+    );
+  };
+
   return (
     <>
-      <Navbar collapseOnSelect expand='lg' className={cx(styles.navbarContainer, "flexRow")}>
+      <Navbar expanded={expanded} onToggle={handleToggle} expand='lg' className={cx(styles.navbarContainer, "flexRow")}>
         <Navbar.Brand className={cx(styles.siteLogo)}>
           <Link to='/'>
             <Icon icon='vscode-icons:file-type-light-todo' />
-            {/* <Icon icon='logos:todomvc' /> */}
+            <span>Task Tracker</span>
           </Link>
         </Navbar.Brand>
 
@@ -41,6 +65,12 @@ const NavBar = () => {
         <Navbar.Collapse className={cx(styles.navbarCollapse, "flexRow")} id='responsive-navbar-nav'>
           <Nav className={cx(styles.primaryNavigation, "flexRow-space-between")}>
             <Button className={cx(styles.navButton)} title='Create Task' onClick={() => displayCreateModal()} />
+            <Button
+              className={cx(styles.navButton)}
+              title='Reset App'
+              onClick={() => handleResetApp()}
+              type='secondary'
+            />
           </Nav>
         </Navbar.Collapse>
       </Navbar>

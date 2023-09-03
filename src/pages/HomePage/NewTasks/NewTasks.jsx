@@ -27,7 +27,9 @@ const NewTasks = () => {
         })}
        </div>
       ) : (
+        <div className={cx(styles.emptyDiv, "flexRow-fully-centered")}>
         <p>No New Task(s) Found</p>
+      </div>
       )}
     </div>
   )

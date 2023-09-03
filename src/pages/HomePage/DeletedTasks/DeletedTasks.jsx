@@ -29,7 +29,9 @@ const DeletedTasks = () => {
         })}
        </div>
       ) : (
+        <div className={cx(styles.emptyDiv, "flexRow-fully-centered")}>
         <p>No Deleted Task(s) Found</p>
+      </div>
       )}
     </div>
   )

@@ -23,21 +23,24 @@ const CreateTask = ({ show, size }) => {
   
   const {action, taskData} = useSelector((state) => state.modal.modalData);
   const [reminder, setReminder] = useState(taskData?.reminder?.status);
-
+console.log(taskData, 'taskData')
     const defaultValues = {
-    title: action === "create" ? "" : taskData?.title ||"",
-    description: action === "create" ? "" : taskData?.description || "",
-    dueDate: action === "create" ? "" : taskData?.dueDate || "",
-    reminder: action === "create" ? "" : taskData?.reminder?.date || "",
+    title: action === "create" ? "" : taskData?.title,
+    description: action === "create" ? "" : taskData?.description,
+    dueDate: action === "create" ? null : taskData?.dueDate,
+    reminder: action === "create" ? null : taskData?.reminder?.date,
   };
 
   const createTaskSchema = Yup.object().shape({
     title: Yup.string().required("Title is required"),
     description: Yup.string().required("Description is required"),
-    dueDate: Yup.string().required("Due Date is required"),
+      dueDate: Yup.date()
+    .min(new Date(), "Due Date must be greater than or equal to the current date and time")
+    .required("Due Date is required"),
     reminder: Yup.date()
+    .nullable() // Allow null values
     .when(['dueDate'], (dueDate, schema) =>
-      schema.min(new Date(), 'Reminder date must be greater than the current date and time')
+      dueDate && schema.min(new Date(), 'Reminder date must be greater than the current date and time')
     )
   });
 
@@ -62,7 +65,7 @@ const CreateTask = ({ show, size }) => {
     };
 
     let response = action === "create" ? await dispatch(createTask(payload)) : await dispatch(modifyTask(payload));
-    console.log("response", response.payload.success);
+
     if(response.payload.success) {
       dispatch(hideModal({
       name: "createTask",
@@ -80,6 +83,7 @@ const CreateTask = ({ show, size }) => {
     dispatch(hideModal({ name: "createTask" }));
   };
 console.log(reminder, 'rm')
+console.log(errors, 'errors')
   return (
     <ModalContainer show={show} size={size}>
       <div className={cx(styles.modalWrapper, "flexCol")}>

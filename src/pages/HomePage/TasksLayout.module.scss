@@ -1,5 +1,12 @@
 .tasksContainer {
+  height: 100%;
+
   .tasksList {
     gap: 1rem;
   }
+
+  .emptyDiv {
+    height: 100%;
+  }
+
 }
