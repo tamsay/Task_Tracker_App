@@ -1,7 +1,8 @@
 import React, { forwardRef } from "react";
-import PropTypes from "prop-types";
-import { FormGroup, StyledTextArea } from "./StyledTextArea";
 import DOMPurify from "dompurify";
+import PropTypes from "prop-types";
+
+import { FormGroup, StyledTextArea } from "./StyledTextArea";
 
 const TextArea = forwardRef(
   ({ placeholder, required, onChange, error, marginbottom, minHeight, borderColor, bgColor, label, ...props }) => {

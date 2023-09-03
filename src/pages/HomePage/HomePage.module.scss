@@ -1,29 +1,28 @@
 .homepageContainer {
   padding: 1rem;
   // background-color: var(--gray10);
-      gap: 1rem;
-      height: calc(100dvh - var(--topNavbarHeight));
-      width: 100%;
-      overflow-y: auto;
-      position: relative;
+  gap: 1rem;
+  height: calc(100dvh - var(--topNavbarHeight));
+  width: 100%;
+  overflow-y: auto;
+  position: relative;
 
-      .tabsWrapper {
-        position: sticky;
-        top: 0;
-        z-index: 1;
-        padding-top: 0.5rem;
-        width: 100%;
-      }
+  .tabsWrapper {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    padding-top: 0.5rem;
+    width: 100%;
+  }
 
-      .contentWrapper {
-        height: 100%;
-        overflow-y: auto;
-        gap: 1rem;
-        border: 1px solid var(--grayBorderColor);
-        padding: 0 0rem 0 0;
-        border-radius: 0.5rem;
-      }
-    
+  .contentWrapper {
+    height: 100%;
+    overflow-y: auto;
+    gap: 1rem;
+    border: 1px solid var(--grayBorderColor);
+    padding: 0 0rem 0 0;
+    border-radius: 0.5rem;
+  }
 }
 
 @media all and (min-width: 768px) {
@@ -37,4 +36,3 @@
     padding: 0rem 4rem;
   }
 }
-

@@ -210,7 +210,7 @@ export const updateTaskStatus = (data) => async (dispatch) => {
   }
 };
 
-export const getNewTasks = (data) => async (dispatch) => {
+export const getNewTasks = () => async (dispatch) => {
   dispatch(startLoading(true));
   try {
     // retrieve current data from local storage
@@ -234,7 +234,7 @@ export const getNewTasks = (data) => async (dispatch) => {
   }
 };
 
-export const getDeletedTasks = (data) => async (dispatch) => {
+export const getDeletedTasks = () => async (dispatch) => {
   dispatch(startLoading(true));
   try {
     // retrieve current data from local storage
@@ -259,7 +259,7 @@ export const getDeletedTasks = (data) => async (dispatch) => {
   }
 };
 
-export const getCompletedTasks = (data) => async (dispatch) => {
+export const getCompletedTasks = () => async (dispatch) => {
   dispatch(startLoading(true));
   try {
     // retrieve current data from local storage
@@ -283,7 +283,7 @@ export const getCompletedTasks = (data) => async (dispatch) => {
   }
 };
 
-export const getUncompletedTasks = (data) => async (dispatch) => {
+export const getUncompletedTasks = () => async (dispatch) => {
   dispatch(startLoading(true));
   try {
     // retrieve current data from local storage

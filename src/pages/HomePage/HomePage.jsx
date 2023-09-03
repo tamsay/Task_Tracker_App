@@ -1,29 +1,21 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Outlet, useNavigate } from "react-router-dom";
 import cx from "classnames";
-import PropTypes from "prop-types";
 
 import styles from "./HomePage.module.scss";
 
-import CreateAndModifyTaskModal from "@/components/Modals/CreateAndModifyTask/CreateAndModifyTask";
-
-import TaskList from "@/components/TaskList/TaskList";
-
-import { hideModal, showModal } from "@/redux/Modal/ModalSlice";
-import Loader from "@/components/Loader/Loader";
-import { getNewTasks, getDeletedTasks, getCompletedTasks, getUncompletedTasks } from "@/redux/Tasks/TasksSlice";
-
-import Tabs from "@/components/Tabs/Tabs";
-import { Outlet, useNavigate, useParams } from "react-router-dom";
 import ConfirmationDialog from "@/components/Modals/ConfirmationDialog/ConfirmationDialog";
+import CreateAndModifyTaskModal from "@/components/Modals/CreateAndModifyTask/CreateAndModifyTask";
 import SetReminder from "@/components/Modals/SetReminder/SetReminder";
+import Tabs from "@/components/Tabs/Tabs";
+
+import { getCompletedTasks, getDeletedTasks, getNewTasks, getUncompletedTasks } from "@/redux/Tasks/TasksSlice";
 
 const HomePage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const params = useParams();
 
-  const modalData = useSelector((state) => state.modal.modalData);
   const displayModal = useSelector((state) => state.modal.show);
   const modalName = useSelector((state) => state.modal.modalName);
 
@@ -37,7 +29,7 @@ const HomePage = () => {
     dispatch(getDeletedTasks());
     dispatch(getCompletedTasks());
     dispatch(getUncompletedTasks());
-  }, []);
+  }, [dispatch]);
 
   const getTabMenu = () => {
     let menuObject = {
@@ -76,14 +68,6 @@ const HomePage = () => {
       {displayModal && modalName === "setReminder" ? <SetReminder show size='md' /> : null}
     </div>
   );
-};
-
-HomePage.defaultProps = {
-  title: ""
-};
-
-HomePage.propTypes = {
-  title: PropTypes.string
 };
 
 export default HomePage;

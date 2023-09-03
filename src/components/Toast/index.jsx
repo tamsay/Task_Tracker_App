@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 import { ToastContainer } from "./styles";
 
@@ -49,4 +50,16 @@ export const ToastError = ({ message, isOpen, close }) => {
       </div>
     </ToastContainer>
   );
+};
+
+ToastSuccess.propTypes = {
+  message: PropTypes.string,
+  isOpen: PropTypes.bool,
+  close: PropTypes.func
+};
+
+ToastError.propTypes = {
+  message: PropTypes.string,
+  isOpen: PropTypes.bool,
+  close: PropTypes.func
 };

@@ -5,7 +5,7 @@ const formatDate = (value, type = "long") => {
     month: type === "long" ? "long" : "2-digit",
     year: "numeric",
     hour: "2-digit",
-    minute: "2-digit",
+    minute: "2-digit"
   };
 
   let dateValue = date.toLocaleDateString("en-US", options);
