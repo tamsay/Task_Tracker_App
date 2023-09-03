@@ -3,8 +3,9 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import './DatePicker.scss';
 
-const DateTime = ({dateValue}) => {
-    const [startDate, setStartDate] = useState(new Date());
+const DateTime = (props) => {
+  const { dateValue, value, ...rest } = props;
+    const [startDate, setStartDate] = useState(value ? new Date(value) : new Date());
 
   useEffect(() => {
     dateValue(startDate);
@@ -16,7 +17,10 @@ const DateTime = ({dateValue}) => {
   };
 
   return (
-      <DatePicker selected={startDate} onChange={handleChange} showTimeSelect dateFormat="MMMM d, yyyy h:mm aa" isClearable={true} />
+      <DatePicker selected={startDate} onChange={handleChange} showTimeSelect dateFormat="MMMM d, yyyy h:mm aa" isClearable={true} minDate={new Date()}
+      timeIntervals={5}
+      timeCaption="Time"
+      />
   );
 };
 

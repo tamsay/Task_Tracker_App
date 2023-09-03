@@ -7,9 +7,9 @@ import imageLoader from "@/assets/icons/loading.svg";
 
 const ButtonComponent = styled.button`
   font-size: ${(props) => (props.size === "small" ? "0.75rem" : "0.875rem")};
-  font-family: ${(props) => (props.size === "small" ? "var(--CairoRegular)" : "var(--CairoBold)")};
-  padding: ${(props) => (props.size === "small" ? "0.5rem 0.5rem" : "0.75rem 1rem")};
-  border-radius: ${(props) => (props.size === "small" ? "32px" : "44px")};
+  font-family: ${(props) => (props.size === "small" ? "var(--regular)" : "var(--medium)")};
+  padding: ${(props) => (props.size === "small" ? "0.25rem 0.25rem" : "0.75rem 1rem")};
+  border-radius: ${(props) => (props.size === "small" ? "4px" : "8px")};
   background-color: ${(props) => (props.type === "primary" ? "var(--primaryBtnBg)" : "var(--secondaryBtnBg)")};
   color: ${(props) => (props.type === "primary" ? "var(--primaryBtnTextColor)" : "var(--secondaryBtnTextColor)")};
   border: 1px solid

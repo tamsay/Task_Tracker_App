@@ -51,7 +51,6 @@ export const FormGroup = styled(Form.Group)`
     color: var(--red2);
     position: absolute;
     left: 0;
-    bottom: -25%;
     text-align: left;
     padding: 0;
     margin: 0;

@@ -1,8 +1,8 @@
-import React from "react";
+import React, {useState} from "react";
 
 import ModalContainer from "../ModalContainer/ModalContainer";
 import { useDispatch, useSelector } from "react-redux";
-import { createTask, getPendingTasks } from "@/redux/Tasks/TasksSlice";
+import { createTask, modifyTask, getNewTasks, getCompletedTasks, getUncompletedTasks } from "@/redux/Tasks/TasksSlice";
 import { hideModal } from "@/redux/Modal/ModalSlice";
 import { nanoid } from "nanoid";
 import { useForm, Controller } from "react-hook-form";
@@ -11,63 +11,81 @@ import Input from "@/components/FixedLabelInput/FixedLabelInput";
 import * as Yup from "yup";
 import Button from "@/components/Button/Button";
 import TextArea from "@/components/TextArea/TextArea";
-import styles from "./CreateTask.module.scss";
+import styles from "./CreateAndModifyTask.module.scss";
 import cx from "classnames";
+import { useNavigate } from "react-router-dom";
+
 
 const CreateTask = ({ show, size }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  
+  const {action, taskData} = useSelector((state) => state.modal.modalData);
+  const [reminder, setReminder] = useState(taskData?.reminder?.status);
 
     const defaultValues = {
-    title: "",
-    description: "",
-    dueDate: "",
+    title: action === "create" ? "" : taskData?.title ||"",
+    description: action === "create" ? "" : taskData?.description || "",
+    dueDate: action === "create" ? "" : taskData?.dueDate || "",
+    reminder: action === "create" ? "" : taskData?.reminder?.date || "",
   };
 
-  const addUserSchema = Yup.object().shape({
+  const createTaskSchema = Yup.object().shape({
     title: Yup.string().required("Title is required"),
     description: Yup.string().required("Description is required"),
     dueDate: Yup.string().required("Due Date is required"),
+    reminder: Yup.date()
+    .when(['dueDate'], (dueDate, schema) =>
+      schema.min(new Date(), 'Reminder date must be greater than the current date and time')
+    )
   });
 
-  const resolver = yupResolver(addUserSchema);
+  const resolver = yupResolver(createTaskSchema);
 
   const {
     handleSubmit,
     formState: { errors },
-    control,
-    reset
+    control
   } = useForm({ defaultValues, resolver, mode: "all" });
 
-  const handleCreateTask = async (data) => {
+  const handleFormSubmission = async (data) => {
     let payload = {
-      id: nanoid(),
+      id: action === "create" ? nanoid() : taskData?.id,
       title: data.title,
       description: data.description,
-      status: "pending",
-      createdAt: `${new Date()}`,
+      status: action === "create" ? "new" : taskData?.status,
+      createdAt: action === "create" ? `${new Date()}` : taskData?.createdAt ,
       updatedAt: `${new Date()}`,
       dueDate: data.dueDate,
+      reminder: reminder ? {status: reminder, date: data.reminder} : {status: reminder, date: null}
     };
-    let response = await dispatch(createTask(payload));
+
+    let response = action === "create" ? await dispatch(createTask(payload)) : await dispatch(modifyTask(payload));
     console.log("response", response.payload.success);
     if(response.payload.success) {
       dispatch(hideModal({
-      name: "testModal",
+      name: "createTask",
     }));
-    dispatch(getPendingTasks());
+    dispatch(getNewTasks());
+    dispatch(getCompletedTasks());
+    dispatch(getUncompletedTasks());
+
+    action === "create" && navigate("/");
     };
+    
   };
 
     const handleCloseModal = () => {
     dispatch(hideModal({ name: "createTask" }));
   };
-
+console.log(reminder, 'rm')
   return (
     <ModalContainer show={show} size={size}>
       <div className={cx(styles.modalWrapper, "flexCol")}>
-          <form className={cx(styles.formWrapper, "flexCol")} onSubmit={handleSubmit((data) => handleCreateTask(data))}>
+          <form className={cx(styles.formWrapper, "flexCol")} onSubmit={handleSubmit((data) => handleFormSubmission(data))}>
           <div className={cx(styles.modalHeader, "flexCol")}>
-            <h6 className={cx(styles.headerTitle)}>Create Task</h6>
+            <h6 className={cx(styles.headerTitle)}>{action === 'create' ? 'Create Task' : 'Modify Task'}</h6>
           </div>
 
           <div className={cx(styles.modalBody, "flexCol")}>
@@ -112,6 +130,30 @@ const CreateTask = ({ show, size }) => {
                 />
               )}
             />
+
+<>
+<div style={{width: '100%', gap: '0.5rem'}} className={cx("flexRow-left-centered")}>
+<label htmlFor="reminder">Set Reminder</label> 
+<input type="checkbox" name="reminder" id="reminder" onChange={(e)=>setReminder(e.target.checked)} checked={taskData?.reminder?.status} />
+</div>
+{
+  reminder && (
+      <Controller
+              name='reminder'
+              control={control}
+              render={({ field }) => (
+                <Input
+                  {...field}
+                  label='Reminder Date'
+                  type='datetime-local'
+                  error={errors?.reminder && errors?.reminder?.message}
+                />
+              )}
+            />
+  )
+}
+</>
+
           </div>
 
           <div className={cx(styles.modalFooter)}>
@@ -119,8 +161,8 @@ const CreateTask = ({ show, size }) => {
               <Button onClick={() => handleCloseModal()} title='Cancel' type='secondary' />
               <Button
                 type='primary'
-                onClick={handleSubmit((data) => handleCreateTask(data))}
-                title='Send'
+                onClick={handleSubmit((data) => handleFormSubmission(data))}
+                title={action === 'create' ? 'Create' : 'Modify'}
               />
             </div>
           </div>

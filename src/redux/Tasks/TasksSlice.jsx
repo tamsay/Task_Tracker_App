@@ -9,7 +9,11 @@ const initialState = {
   deleteTaskData: {},
   updateTaskStatusData: {},
   modifyTaskData: {},
-  getPendingTasksData: {}
+  getNewTasksData: {},
+  getDeletedTasksData: {},
+  getCompletedTasksData: {},
+  getUncompletedTasksData: {},
+  updateReminderStatusData: {}
 };
 
 export const tasksSlice = createSlice({
@@ -46,8 +50,28 @@ export const tasksSlice = createSlice({
       state.loading = false;
     },
 
-    getPendingTasksAction: (state, action) => {
-      state.getPendingTasksData = action.payload;
+    getNewTasksAction: (state, action) => {
+      state.getNewTasksData = action.payload;
+      state.loading = false;
+    },
+
+    getDeletedTasksAction: (state, action) => {
+      state.getDeletedTasksData = action.payload;
+      state.loading = false;
+    },
+
+    getCompletedTasksAction: (state, action) => {
+      state.getCompletedTasksData = action.payload;
+      state.loading = false;
+    },
+
+    getUncompletedTasksAction: (state, action) => {
+      state.getUncompletedTasksData = action.payload;
+      state.loading = false;
+    },
+
+    updateReminderStatusAction: (state, action) => {
+      state.updateReminderStatusData = action.payload;
       state.loading = false;
     }
   }
@@ -62,19 +86,28 @@ const {
   deleteTaskAction,
   updateTaskStatusAction,
   modifyTaskAction,
-  getPendingTasksAction
+  getNewTasksAction,
+  getDeletedTasksAction,
+  getCompletedTasksAction,
+  getUncompletedTasksAction,
+  updateReminderStatusAction
 } = tasksSlice.actions;
 
 export const createTask = (data) => async (dispatch) => {
   try {
     dispatch(startLoading());
-    // add data to local storage
+    // retrieve current data from local storage
     let appData = JSON.parse(localStorage.getItem("appData"));
+
     if (appData) {
-      appData = { ...appData, pendingTasks: [...appData.pendingTasks, data] };
+      // add new task to existing tasks
+      appData = [...appData, data];
     } else {
-      appData = { pendingTasks: [data] };
+      // create new appData array
+      appData = [data];
     }
+
+    // update local storage
     localStorage.setItem("appData", JSON.stringify(appData));
     toast.success("Task created successfully");
 
@@ -85,7 +118,7 @@ export const createTask = (data) => async (dispatch) => {
       })
     );
   } catch (e) {
-    toast.error("Something went wrong");
+    toast.error("Task could not be created at this time. Please try again later.");
     return dispatch(hasError(e.message));
   }
 };
@@ -93,56 +126,214 @@ export const createTask = (data) => async (dispatch) => {
 export const deleteTask = (data) => async (dispatch) => {
   try {
     dispatch(startLoading());
-    const response = await deleteTaskApi(data);
-    toast.success(response.data.message);
-    return dispatch(deleteTaskAction(response?.data));
+    // retrieve current data from local storage
+    let appData = JSON.parse(localStorage.getItem("appData"));
+
+    if (appData) {
+      // find the current task and update the status to deleted
+      const index = appData.findIndex((task) => task.id === data);
+      appData[index].status = "deleted";
+    }
+
+    // update local storage
+    localStorage.setItem("appData", JSON.stringify(appData));
+    toast.success("Task deleted successfully");
+
+    return dispatch(
+      deleteTaskAction({
+        message: "Task deleted successfully",
+        success: true
+      })
+    );
   } catch (e) {
-    toast.error(e.response.data.message);
-    return dispatch(hasError(e.response.data.message));
+    toast.error("Task could not be deleted at this time. Please try again later.");
+    console.log(e);
+    return dispatch(hasError(e.message));
   }
 };
 
 export const modifyTask = (data) => async (dispatch) => {
   try {
     dispatch(startLoading());
-    const response = await modifyTaskApi(data);
-    toast.success(response.data.message);
-    return dispatch(modifyTaskAction(response?.data));
+    // retrieve current data from local storage
+    let appData = JSON.parse(localStorage.getItem("appData"));
+
+    if (appData) {
+      // find the current task and replace it with the updated one
+      const index = appData.findIndex((task) => task.id === data.id);
+      appData[index] = data;
+    }
+    // update local storage
+    localStorage.setItem("appData", JSON.stringify(appData));
+    toast.success("Task modified successfully");
+
+    return dispatch(
+      modifyTaskAction({
+        message: "Task modified successfully",
+        success: true
+      })
+    );
   } catch (e) {
-    toast.error(e.response.data.message);
-    return dispatch(hasError(e.response.data.message));
+    toast.error("Task could not be modified at this time. Please try again later.");
+    return dispatch(hasError(e.message));
   }
 };
 
 export const updateTaskStatus = (data) => async (dispatch) => {
   try {
     dispatch(startLoading());
-    const response = await updateTaskStatusApi(data);
-    toast.success(response.data.message);
-    return dispatch(updateTaskStatusAction(response?.data));
+    console.log(data, "update date");
+
+    // retrieve current data from local storage
+    let appData = JSON.parse(localStorage.getItem("appData"));
+
+    if (appData) {
+      // find the current task and update the status to the provided value
+      const index = appData.findIndex((task) => task.id === data.id);
+      appData[index].status = data?.status;
+    }
+
+    // update local storage
+    localStorage.setItem("appData", JSON.stringify(appData));
+    toast.success("Task status updated successfully");
+
+    return dispatch(
+      updateTaskStatusAction({
+        message: "Task status updated successfully",
+        success: true
+      })
+    );
   } catch (e) {
-    toast.error(e.response.data.message);
-    return dispatch(hasError(e.response.data.message));
+    toast.error("Task status could not be updated at this time. Please try again later.");
+    console.log(e);
+    return dispatch(hasError(e.message));
   }
 };
 
-export const getPendingTasks = (data) => async (dispatch) => {
+export const getNewTasks = (data) => async (dispatch) => {
+  dispatch(startLoading(true));
   try {
-    dispatch(startLoading(true));
+    // retrieve current data from local storage
     const response = await JSON.parse(localStorage.getItem("appData"));
-    if (response) {
+    if (Array.isArray(response)) {
       dispatch(startLoading(false));
-      return response?.pendingTasks
-        ? dispatch(getPendingTasksAction(response?.pendingTasks))
-        : dispatch(getPendingTasksAction([]));
+
+      // Retrieve tasks with status of new
+      const newTasks = response.filter((task) => task.status === "new");
+      return dispatch(getNewTasksAction(newTasks));
     } else {
       dispatch(startLoading(false));
-      localStorage.setItem("appData", JSON.stringify({ pendingTasks: [] }));
-      return dispatch(getPendingTasksAction([]));
+
+      // Initialize the new tasks array if it doesn't exist
+      return dispatch(getNewTasksAction([]));
     }
   } catch (e) {
     dispatch(startLoading(false));
-    toast.error("Something went wrong");
+    toast.error("New tasks cannot be retrieved at this time. Please try again later.");
+    return dispatch(hasError(e.message));
+  }
+};
+
+export const getDeletedTasks = (data) => async (dispatch) => {
+  dispatch(startLoading(true));
+  try {
+    // retrieve current data from local storage
+    const response = await JSON.parse(localStorage.getItem("appData"));
+
+    if (Array.isArray(response)) {
+      dispatch(startLoading(false));
+
+      // Retrieve tasks with status of deleted
+      const deletedTasks = response.filter((task) => task.status === "deleted");
+      return dispatch(getDeletedTasksAction(deletedTasks));
+    } else {
+      dispatch(startLoading(false));
+
+      // Initialize the deleted tasks array if it doesn't exist
+      return dispatch(getDeletedTasksAction([]));
+    }
+  } catch (e) {
+    dispatch(startLoading(false));
+    toast.error("Deleted tasks cannot be retrieved at this time. Please try again later.");
+    return dispatch(hasError(e.message));
+  }
+};
+
+export const getCompletedTasks = (data) => async (dispatch) => {
+  dispatch(startLoading(true));
+  try {
+    // retrieve current data from local storage
+    const response = await JSON.parse(localStorage.getItem("appData"));
+    if (Array.isArray(response)) {
+      dispatch(startLoading(false));
+
+      // Retrieve tasks with status of completed
+      const completedTasks = response.filter((task) => task.status === "completed");
+      return dispatch(getCompletedTasksAction(completedTasks));
+    } else {
+      dispatch(startLoading(false));
+
+      // Initialize the completed tasks array if it doesn't exist
+      return dispatch(getCompletedTasksAction([]));
+    }
+  } catch (e) {
+    dispatch(startLoading(false));
+    toast.error("Completed tasks cannot be retrieved at this time. Please try again later.");
+    return dispatch(hasError(e.message));
+  }
+};
+
+export const getUncompletedTasks = (data) => async (dispatch) => {
+  dispatch(startLoading(true));
+  try {
+    // retrieve current data from local storage
+    const response = await JSON.parse(localStorage.getItem("appData"));
+    if (Array.isArray(response)) {
+      dispatch(startLoading(false));
+
+      // Retrieve tasks with status of uncompleted
+
+      const uncompletedTasks = response.filter((task) => task.status === "uncompleted");
+
+      return dispatch(getUncompletedTasksAction(uncompletedTasks));
+    } else {
+      dispatch(startLoading(false));
+
+      // Initialize the uncompleted tasks array if it doesn't exist
+      return dispatch(getUncompletedTasksAction([]));
+    }
+  } catch (e) {
+    dispatch(startLoading(false));
+    toast.error("Uncompleted tasks cannot be retrieved at this time. Please try again later.");
+    return dispatch(hasError(e.message));
+  }
+};
+
+export const updateReminderStatus = (data) => async (dispatch) => {
+  try {
+    dispatch(startLoading());
+    // retrieve current data from local storage
+    let appData = JSON.parse(localStorage.getItem("appData"));
+
+    if (appData) {
+      // find the current task and update the reminder status to the provided value
+      const index = appData.findIndex((task) => task.id === data.id);
+      appData[index].reminder.status = data?.status;
+    }
+
+    // update local storage
+    localStorage.setItem("appData", JSON.stringify(appData));
+    toast.success("Reminder status updated successfully");
+
+    return dispatch(
+      updateReminderStatusAction({
+        message: "Reminder status updated successfully",
+        success: true
+      })
+    );
+  } catch (e) {
+    toast.error("Reminder status could not be updated at this time. Please try again later.");
+    console.log(e);
     return dispatch(hasError(e.message));
   }
 };

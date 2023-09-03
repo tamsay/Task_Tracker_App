@@ -12,7 +12,8 @@
     z-index: 10;
 
     svg {
-      width: clamp(4rem, 7vw, 6rem);
+      //   width: clamp(4rem, 7vw, 6rem);
+      width: auto;
       height: var(--topNavbarHeight);
       object-fit: contain;
       padding: 0.5rem 0rem 0.5rem 0rem;
@@ -23,7 +24,7 @@
     font-size: 1rem;
     margin: 0rem 0rem 0rem 0rem;
     padding: 0rem;
-    background-color: #a60473;
+    background-color: var(--primaryColor);
     z-index: 10;
 
     &:focus,

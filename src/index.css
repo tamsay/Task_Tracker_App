@@ -49,7 +49,7 @@ body {
 ::-webkit-scrollbar-thumb {
   border-radius: 10px;
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-  background-color: #06b9c6;
+  background-color: var(--primaryColor);
 }
 
 ::-webkit-scrollbar-track {

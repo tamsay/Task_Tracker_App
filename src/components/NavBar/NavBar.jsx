@@ -1,30 +1,29 @@
 import React from "react";
 import { Nav, Navbar } from "react-bootstrap";
-import { useDispatch, useSelector } from "react-redux";
-import { Link, NavLink } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 import cx from "classnames";
 import { Icon } from "@iconify/react";
 
 import styles from "./NavBar.module.scss";
 
 import Button from "@/components/Button/Button";
-import CreateTaskModal from "@/components/Modals/CreateTask/CreateTask";
 
-import { hideModal, showModal } from "@/redux/Modal/ModalSlice";
+import { showModal } from "@/redux/Modal/ModalSlice";
 
 const NavBar = () => {
   const dispatch = useDispatch();
 
-  const modalData = useSelector((state) => state.modal.modalData);
-  const displayModal = useSelector((state) => state.modal.show);
-  const modalName = useSelector((state) => state.modal.modalName);
-
-  console.log("modalData", modalData);
-  console.log("displayModal", displayModal);
-  console.log("modalName", modalName);
-
-  const handleCreateTaskModal = () => {
-    dispatch(showModal({ modalData: {}, name: "createTask" }));
+  const displayCreateModal = () => {
+    dispatch(
+      showModal({
+        modalData: {
+          action: "create",
+          taskData: {}
+        },
+        name: "createAndModifyTask"
+      })
+    );
   };
 
   return (
@@ -33,6 +32,7 @@ const NavBar = () => {
         <Navbar.Brand className={cx(styles.siteLogo)}>
           <Link to='/'>
             <Icon icon='vscode-icons:file-type-light-todo' />
+            {/* <Icon icon='logos:todomvc' /> */}
           </Link>
         </Navbar.Brand>
 
@@ -40,12 +40,9 @@ const NavBar = () => {
 
         <Navbar.Collapse className={cx(styles.navbarCollapse, "flexRow")} id='responsive-navbar-nav'>
           <Nav className={cx(styles.primaryNavigation, "flexRow-space-between")}>
-            {/* <NavLink  className={(navData) => navData.isActive && cx(styles.active)} end to="/"><Icon icon="cil:home" width={16} /> Home</NavLink>      
-            <NavLink  className={(navData) => navData.isActive && cx(styles.active)} to="/products"><Icon icon="ph:film-slate-thin" width={16} /> Products</NavLink> */}
-            <Button className={cx(styles.navButton)} title='Create Task' onClick={() => handleCreateTaskModal()} />
+            <Button className={cx(styles.navButton)} title='Create Task' onClick={() => displayCreateModal()} />
           </Nav>
         </Navbar.Collapse>
-        {displayModal && modalName === "createTask" ? <CreateTaskModal show size='md' /> : null}
       </Navbar>
     </>
   );

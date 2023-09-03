@@ -1,49 +1,40 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React from "react";
+import cx from "classnames";
+import styles from "./Tabs.module.scss";
+import PropTypes from "prop-types";
+import { useLocation } from "react-router-dom";
 
-import { LeftTab, RightTab, Tab, TabContent, TabItem, TabWrapper } from "./styles";
+const Tabs = ({ data, onClick }) => {
+  const location = useLocation();
+  const path = location.pathname.split("/").pop();
+  let subMenuPath = data.find((item) => item?.path === path)?.path || data[0]?.path;
 
-const Tabs = ({
-  tabs,
-  centralise,
-  background,
-  renderActionTab,
-  formTab,
-  leftHeader,
-  rightHeader,
-  midSlot,
-  ...rest
-}) => {
-  const [activeTab, setActiveTab] = useState(0);
-  const navigate = useNavigate();
-
-  const handleTabs = (index, name) => {
-    setActiveTab(index);
+  const handleTabClick = (item) => {
+    onClick(item);
   };
 
-  const ActiveTabComponent = (props) => {
-    const Component = tabs[activeTab]?.component;
-    return <Component {...props} activeTabName={tabs[activeTab]?.name} />;
-  };
   return (
-    <>
-      <TabWrapper formTab={formTab}>
-        {leftHeader && <LeftTab>{leftHeader}</LeftTab>}
-        <Tab centralise={centralise} background={background} formTab={formTab}>
-          {tabs.map((tab, index) => (
-            <TabItem key={index} isActive={activeTab === index} onClick={() => handleTabs(index, tab.name)} {...rest}>
-              {tab.name}
-            </TabItem>
-          ))}
-        </Tab>
-        {rightHeader && <RightTab>{rightHeader}</RightTab>}
-      </TabWrapper>
-      {midSlot && <Tab>{midSlot}</Tab>}
-      <TabContent>
-        <ActiveTabComponent {...rest} />
-      </TabContent>
-    </>
+    <div className={cx(styles.tabsContainer, "flexRow")}>
+      {Array.isArray(data) &&
+        data.map((item, index) => {
+          return (
+            <span
+              key={index}
+              onClick={() => handleTabClick(item, index)}
+              className={cx(styles.tab, subMenuPath === item?.path ? styles.active : null)}
+            >
+              {item?.name}
+            </span>
+          );
+        })}
+    </div>
   );
+};
+
+Tabs.propTypes = {
+  data: PropTypes.array,
+  onClick: PropTypes.func,
+  active: PropTypes.bool
 };
 
 export default Tabs;

@@ -39,7 +39,7 @@ const FixedLabelInput = forwardRef(
         {label && <label>{label}</label>}
         <div className='input-container'>
           {icon && <img src={searchIcon} alt='search icon' />}
-          {type === "datetime-local" ? <DateTimePicker className="datePicker" dateValue={getDateTimeValue} /> : <input
+          {type === "datetime-local" ? <DateTimePicker className="datePicker" dateValue={getDateTimeValue} {...props} /> : <input
             type={inputType}
             placeholder={placeholder}
             required={required}
