@@ -29,7 +29,8 @@ const CreateAndModifyTask = ({ show, size }) => {
     title: action === "create" ? "" : taskData?.title,
     description: action === "create" ? "" : taskData?.description,
     dueDate: action === "create" ? null : taskData?.dueDate,
-    reminder: action === "create" ? null : taskData?.reminder?.date
+    reminder: action === "create" ? null : taskData?.reminder?.date,
+    showReminder: action === "create" ? false : taskData?.reminder?.status
   };
 
   const createTaskSchema = Yup.object().shape({
@@ -38,13 +39,15 @@ const CreateAndModifyTask = ({ show, size }) => {
     dueDate: Yup.date()
       .min(new Date(), "Due Date must be greater than or equal to the current date and time")
       .required("Due Date is required"),
-    reminder: Yup.date()
-      .nullable()
-      .when(
-        ["showReminder"],
-        (showReminder, schema) =>
-          showReminder && schema.min(new Date(), "Reminder date must be greater than the current date and time")
-      )
+    showReminder: Yup.boolean(),
+    reminder: Yup.date().when("showReminder", {
+      is: true,
+      then: (schema) =>
+        schema
+          .min(new Date(), "Reminder Date must be greater than or equal to the current date and time")
+          .required("Reminder Date is required"),
+      otherwise: (schema) => schema.nullable()
+    })
   });
 
   const resolver = yupResolver(createTaskSchema);
@@ -53,7 +56,8 @@ const CreateAndModifyTask = ({ show, size }) => {
     handleSubmit,
     formState: { errors },
     control,
-    setValue
+    setValue,
+    register
   } = useForm({ defaultValues, resolver, mode: "all" });
 
   const handleFormSubmission = async (data) => {
@@ -90,6 +94,16 @@ const CreateAndModifyTask = ({ show, size }) => {
 
   const getQuillContent = (data) => {
     setValue("description", data);
+  };
+
+  const handleReminderToggle = (checked) => {
+    setShowReminder(checked);
+
+    if (checked === false) {
+      setValue("reminder", null, { shouldValidate: true });
+    }
+
+    setValue("showReminder", checked, { shouldValidate: true });
   };
 
   return (
@@ -154,8 +168,9 @@ const CreateAndModifyTask = ({ show, size }) => {
                   type='checkbox'
                   name='showReminder'
                   id='showReminder'
-                  onChange={(e) => setShowReminder(e.target.checked)}
+                  onClick={(e) => handleReminderToggle(e.target.checked)}
                   checked={showReminder}
+                  {...register("showReminder")}
                 />
               </div>
               {showReminder && (

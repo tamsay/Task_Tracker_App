@@ -21,11 +21,11 @@ const DateTime = ({ dateValue, value }) => {
     <DatePicker
       selected={startDate}
       onChange={handleChange}
-      showTimeSelect
       dateFormat='MMMM d, yyyy h:mm aa'
       isClearable={true}
       minDate={new Date()}
-      timeIntervals={5}
+      showTimeInput
+      timeInputLabel='Time:'
     />
   );
 };

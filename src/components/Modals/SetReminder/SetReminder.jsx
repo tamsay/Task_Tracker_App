@@ -28,17 +28,20 @@ const SetReminder = ({ show, size }) => {
   const [showReminder, setShowReminder] = useState(taskData?.reminder?.status);
 
   const defaultValues = {
-    reminder: action === "create" ? "" : taskData?.reminder?.date
+    reminder: action === "create" ? "" : taskData?.reminder?.date,
+    showReminder: action === "create" ? false : taskData?.reminder?.status
   };
 
   const createTaskSchema = Yup.object().shape({
-    reminder: Yup.date()
-      .nullable()
-      .when(
-        ["showReminder"],
-        (showReminder, schema) =>
-          showReminder && schema.min(new Date(), "Reminder date must be greater than the current date and time")
-      )
+    showReminder: Yup.boolean(),
+    reminder: Yup.date().when("showReminder", {
+      is: true,
+      then: (schema) =>
+        schema
+          .min(new Date(), "Reminder Date must be greater than or equal to the current date and time")
+          .required("Reminder Date is required"),
+      otherwise: (schema) => schema.nullable()
+    })
   });
 
   const resolver = yupResolver(createTaskSchema);
@@ -46,7 +49,9 @@ const SetReminder = ({ show, size }) => {
   const {
     handleSubmit,
     formState: { errors },
-    control
+    control,
+    register,
+    setValue
   } = useForm({ defaultValues, resolver, mode: "all" });
 
   const handleFormSubmission = async (data) => {
@@ -83,6 +88,16 @@ const SetReminder = ({ show, size }) => {
     dispatch(hideModal({ name: "setReminder" }));
   };
 
+  const handleReminderToggle = (checked) => {
+    setShowReminder(checked);
+
+    if (checked === false) {
+      setValue("reminder", null, { shouldValidate: true });
+    }
+
+    setValue("showReminder", checked, { shouldValidate: true });
+  };
+
   return (
     <ModalContainer show={show} size={size}>
       <div className={cx(styles.modalWrapper, "flexCol")}>
@@ -102,8 +117,9 @@ const SetReminder = ({ show, size }) => {
                   type='checkbox'
                   name='showReminder'
                   id='showReminder'
-                  onChange={(e) => setShowReminder(e.target.checked)}
+                  onClick={(e) => handleReminderToggle(e.target.checked)}
                   checked={showReminder}
+                  {...register("showReminder")}
                 />
               </div>
               {showReminder && (
