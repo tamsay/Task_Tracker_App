@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Nav, Navbar } from "react-bootstrap";
 import { useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import cx from "classnames";
 import { Icon } from "@iconify/react";
 
@@ -11,8 +11,11 @@ import Button from "@/components/Button/Button";
 
 import { showModal } from "@/redux/Modal/ModalSlice";
 
+import useIsMobile from "@/hooks/useIsMobile";
+
 const NavBar = () => {
   const dispatch = useDispatch();
+  const isMobile = useIsMobile();
 
   const [expanded, setExpanded] = useState(false);
 
@@ -50,6 +53,10 @@ const NavBar = () => {
     );
   };
 
+  const handleMenuClick = () => {
+    setExpanded(false);
+  };
+
   return (
     <>
       <Navbar expanded={expanded} onToggle={handleToggle} expand='lg' className={cx(styles.navbarContainer, "flexRow")}>
@@ -71,6 +78,22 @@ const NavBar = () => {
               onClick={() => handleResetApp()}
               type='secondary'
             />
+            {isMobile && (
+              <>
+                <NavLink onClick={handleMenuClick} to='/new-tasks'>
+                  New Tasks
+                </NavLink>
+                <NavLink onClick={handleMenuClick} to='/completed-tasks'>
+                  Completed Tasks
+                </NavLink>
+                <NavLink onClick={handleMenuClick} to='/uncompleted-tasks'>
+                  Uncompleted Tasks
+                </NavLink>
+                <NavLink onClick={handleMenuClick} to='/deleted-tasks'>
+                  Deleted Tasks
+                </NavLink>
+              </>
+            )}
           </Nav>
         </Navbar.Collapse>
       </Navbar>

@@ -6,6 +6,7 @@ import cx from "classnames";
 
 import styles from "./HomePage.module.scss";
 
+import Button from "@/components/Button/Button";
 import ConfirmationDialog from "@/components/Modals/ConfirmationDialog/ConfirmationDialog";
 import CreateAndModifyTaskModal from "@/components/Modals/CreateAndModifyTask/CreateAndModifyTask";
 import SetReminder from "@/components/Modals/SetReminder/SetReminder";
@@ -13,6 +14,7 @@ import Tabs from "@/components/Tabs/Tabs";
 
 import notificationSound from "@/assets/audio/notification-1.mp3";
 
+import { showModal } from "@/redux/Modal/ModalSlice";
 import {
   getAllTasks,
   getCompletedTasks,
@@ -24,9 +26,12 @@ import {
 
 import formatDate from "@/helpers/formatDate";
 
+import useIsMobile from "@/hooks/useIsMobile";
+
 const HomePage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const isMobile = useIsMobile();
 
   const displayModal = useSelector((state) => state.modal.show);
   const modalName = useSelector((state) => state.modal.modalName);
@@ -137,8 +142,46 @@ const HomePage = () => {
     navigate(tab.path);
   };
 
+  const displayCreateModal = () => {
+    dispatch(
+      showModal({
+        modalData: {
+          action: "create",
+          taskData: {}
+        },
+        name: "createAndModifyTask"
+      })
+    );
+  };
+
+  const handleResetApp = () => {
+    // display confirmation dialog
+    dispatch(
+      showModal({
+        modalData: {
+          action: "resetApp",
+          title: "Reset App",
+          message: "Are you sure you want to reset the app?"
+        },
+        name: "confirmationDialog"
+      })
+    );
+  };
+
   return (
     <div className={cx(styles.homepageContainer, "flexCol")}>
+      {isMobile && (
+        <div className={cx(styles.headerBtnGroup, "flexRow-fully-centered")}>
+          <Button className={cx(styles.navButton)} title='Create Task' onClick={() => displayCreateModal()} />
+          <Button
+            className={cx(styles.navButton)}
+            title='Reset App'
+            onClick={() => handleResetApp()}
+            type='secondary'
+          />
+        </div>
+      )}
+
       <div className={cx(styles.tabsWrapper, "flexCol")}>
         <Tabs data={getTabMenu()} onClick={handleTabMenuClick} />
       </div>

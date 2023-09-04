@@ -6,6 +6,10 @@
   overflow-y: auto;
   position: relative;
 
+  .headerBtnGroup {
+    gap: 1rem;
+  }
+
   .tabsWrapper {
     position: sticky;
     top: 0;
