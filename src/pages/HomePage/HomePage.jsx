@@ -44,9 +44,25 @@ const HomePage = () => {
   }, [dispatch]);
 
   const playNotificationSound = () => {
-    const audio = new Audio(notificationSound);
-    audio.play();
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    const audioElement = new Audio(notificationSound);
+
+    const source = audioContext.createMediaElementSource(audioElement);
+    source.connect(audioContext.destination);
+    audioElement.play();
   };
+
+  useEffect(() => {
+    // Add a global event listener to handle notifications even when the tab is not active
+    window.addEventListener("showNotification", () => {
+      playNotificationSound();
+    });
+
+    return () => {
+      // Remove the event listener when the component unmounts
+      window.removeEventListener("showNotification", () => {});
+    };
+  }, []);
 
   // This section is for the reminder notification
   useEffect(() => {
@@ -64,7 +80,10 @@ const HomePage = () => {
             dispatch(getNewTasks());
             dispatch(getCompletedTasks());
             dispatch(getUncompletedTasks());
-            playNotificationSound();
+
+            // Trigger the event to play the sound
+            const event = new Event("showNotification");
+            window.dispatchEvent(event);
 
             const toastData = {
               headerMessage: "Due Reminder Notification",
