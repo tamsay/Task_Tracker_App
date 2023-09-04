@@ -23,7 +23,7 @@ const CreateAndModifyTask = ({ show, size }) => {
   const navigate = useNavigate();
 
   const { action, taskData } = useSelector((state) => state.modal.modalData);
-  const [reminder, setReminder] = useState(taskData?.reminder?.status);
+  const [showReminder, setShowReminder] = useState(taskData?.reminder?.status);
 
   const defaultValues = {
     title: action === "create" ? "" : taskData?.title,
@@ -41,9 +41,9 @@ const CreateAndModifyTask = ({ show, size }) => {
     reminder: Yup.date()
       .nullable()
       .when(
-        ["dueDate"],
-        (dueDate, schema) =>
-          dueDate && schema.min(new Date(), "Reminder date must be greater than the current date and time")
+        ["showReminder"],
+        (showReminder, schema) =>
+          showReminder && schema.min(new Date(), "Reminder date must be greater than the current date and time")
       )
   });
 
@@ -64,7 +64,7 @@ const CreateAndModifyTask = ({ show, size }) => {
       createdAt: action === "create" ? `${new Date()}` : taskData?.createdAt,
       updatedAt: `${new Date()}`,
       dueDate: data.dueDate,
-      reminder: reminder ? { status: reminder, date: data.reminder } : { status: reminder, date: null }
+      reminder: data?.reminder ? { status: showReminder, date: data.reminder } : { status: showReminder, date: null }
     };
 
     let response = action === "create" ? await dispatch(createTask(payload)) : await dispatch(modifyTask(payload));
@@ -146,13 +146,13 @@ const CreateAndModifyTask = ({ show, size }) => {
                 <label htmlFor='reminder'>Set Reminder</label>
                 <input
                   type='checkbox'
-                  name='reminder'
-                  id='reminder'
-                  onChange={(e) => setReminder(e.target.checked)}
-                  checked={taskData?.reminder?.status}
+                  name='showReminder'
+                  id='showReminder'
+                  onChange={(e) => setShowReminder(e.target.checked)}
+                  checked={showReminder}
                 />
               </div>
-              {reminder && (
+              {showReminder && (
                 <Controller
                   name='reminder'
                   control={control}

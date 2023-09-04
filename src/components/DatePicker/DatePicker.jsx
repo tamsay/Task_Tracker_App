@@ -5,9 +5,7 @@ import PropTypes from "prop-types";
 import "./DatePicker.scss";
 import "react-datepicker/dist/react-datepicker.css";
 
-const DateTime = (props) => {
-  // eslint-disable-next-line no-unused-vars
-  const { dateValue, value, ...rest } = props;
+const DateTime = ({ dateValue, value }) => {
   const [startDate, setStartDate] = useState(value ? new Date(value) : new Date());
 
   useEffect(() => {
