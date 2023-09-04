@@ -30,6 +30,7 @@
 @media all and (min-width: 992px) {
   .tasksContainer {
     .gridView {
+      display: grid;
       grid-template-columns: repeat(2, 1fr);
     }
   }

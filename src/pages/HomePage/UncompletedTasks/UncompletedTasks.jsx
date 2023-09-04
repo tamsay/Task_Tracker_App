@@ -52,7 +52,7 @@ const UncompletedTasks = () => {
         </>
       ) : (
         <div className={cx(styles.emptyDiv, "flexRow-fully-centered")}>
-          <p>No Completed Task(s) Found</p>
+          <p>No Uncompleted Task(s) Found</p>
         </div>
       )}
     </div>
