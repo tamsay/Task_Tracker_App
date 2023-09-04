@@ -39,7 +39,7 @@ const ConfirmationDialog = ({ show, size }) => {
         break;
       case "resetApp":
         localStorage.clear();
-        window.location.reload();
+        window.location.href = "/";
         break;
       default:
         break;

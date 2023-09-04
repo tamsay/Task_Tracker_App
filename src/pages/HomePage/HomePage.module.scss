@@ -21,6 +21,10 @@
     border: 1px solid var(--grayBorderColor);
     padding: 0 0rem 0 0;
   }
+
+  .toastMessageContainer {
+    background-color: red;
+  }
 }
 
 @media all and (min-width: 768px) {

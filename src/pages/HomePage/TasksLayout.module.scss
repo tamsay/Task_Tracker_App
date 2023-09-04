@@ -22,14 +22,16 @@
     gap: 1rem;
   }
 
-  .gridView {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
-  }
-
   .emptyDiv {
     height: 100%;
+  }
+}
+
+@media all and (min-width: 992px) {
+  .tasksContainer {
+    .gridView {
+      grid-template-columns: repeat(2, 1fr);
+    }
   }
 }
 

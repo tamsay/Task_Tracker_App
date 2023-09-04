@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Outlet, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import cx from "classnames";
 
 import styles from "./HomePage.module.scss";
@@ -10,7 +11,18 @@ import CreateAndModifyTaskModal from "@/components/Modals/CreateAndModifyTask/Cr
 import SetReminder from "@/components/Modals/SetReminder/SetReminder";
 import Tabs from "@/components/Tabs/Tabs";
 
-import { getCompletedTasks, getDeletedTasks, getNewTasks, getUncompletedTasks } from "@/redux/Tasks/TasksSlice";
+import notificationSound from "@/assets/audio/notification-1.mp3";
+
+import {
+  getAllTasks,
+  getCompletedTasks,
+  getDeletedTasks,
+  getNewTasks,
+  getUncompletedTasks,
+  modifyTask
+} from "@/redux/Tasks/TasksSlice";
+
+import formatDate from "@/helpers/formatDate";
 
 const HomePage = () => {
   const dispatch = useDispatch();
@@ -29,6 +41,59 @@ const HomePage = () => {
     dispatch(getDeletedTasks());
     dispatch(getCompletedTasks());
     dispatch(getUncompletedTasks());
+  }, [dispatch]);
+
+  const playNotificationSound = () => {
+    const audio = new Audio(notificationSound);
+    audio.play();
+  };
+
+  // This section is for the reminder notification
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      let response = await dispatch(getAllTasks());
+      if (Array.isArray(response.payload) && response.payload.length > 0) {
+        let tasks = response.payload;
+        let dueReminderTasks = tasks.filter(
+          (task) => task.reminder?.status && new Date(task.reminder.date) <= new Date()
+        );
+
+        dueReminderTasks.length &&
+          dueReminderTasks.forEach((task) => {
+            dispatch(modifyTask({ ...task, reminder: { date: null, status: false } }));
+            dispatch(getNewTasks());
+            dispatch(getCompletedTasks());
+            dispatch(getUncompletedTasks());
+            playNotificationSound();
+
+            const toastData = {
+              headerMessage: "Due Reminder Notification",
+              message: `${task.title} is due on ${formatDate(task.reminder.date)}`
+            };
+
+            const ToastMessage = () => {
+              return (
+                <div className={cx(styles.toastMessageContainer, "flexCol")}>
+                  <h5 className={cx(styles.header)}>{toastData.headerMessage}</h5>
+                  <p className={cx(styles.message)}>{toastData.message}</p>
+                </div>
+              );
+            };
+
+            toast.info(<ToastMessage />, {
+              position: "top-center",
+              autoClose: false,
+              hideProgressBar: true,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              toastId: task.id,
+              icon: false
+            });
+          });
+      }
+    }, 30000);
+    return () => clearInterval(interval);
   }, [dispatch]);
 
   const getTabMenu = () => {

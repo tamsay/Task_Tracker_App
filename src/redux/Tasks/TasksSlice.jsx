@@ -13,7 +13,8 @@ const initialState = {
   getDeletedTasksData: {},
   getCompletedTasksData: {},
   getUncompletedTasksData: {},
-  updateReminderStatusData: {}
+  updateReminderStatusData: {},
+  getAllTasksData: {}
 };
 
 export const tasksSlice = createSlice({
@@ -73,6 +74,11 @@ export const tasksSlice = createSlice({
     updateReminderStatusAction: (state, action) => {
       state.updateReminderStatusData = action.payload;
       state.loading = false;
+    },
+
+    getAllTasksAction: (state, action) => {
+      state.getAllTasksData = action.payload;
+      state.loading = false;
     }
   }
 });
@@ -90,7 +96,8 @@ const {
   getDeletedTasksAction,
   getCompletedTasksAction,
   getUncompletedTasksAction,
-  updateReminderStatusAction
+  updateReminderStatusAction,
+  getAllTasksAction
 } = tasksSlice.actions;
 
 export const createTask = (data) => async (dispatch) => {
@@ -330,6 +337,27 @@ export const updateReminderStatus = (data) => async (dispatch) => {
     );
   } catch (e) {
     toast.error("Reminder status could not be updated at this time. Please try again later.");
+    return dispatch(hasError(e.message));
+  }
+};
+
+export const getAllTasks = () => async (dispatch) => {
+  dispatch(startLoading(true));
+  try {
+    // retrieve current data from local storage
+    const response = await JSON.parse(localStorage.getItem("appData"));
+    if (Array.isArray(response)) {
+      dispatch(startLoading(false));
+
+      return dispatch(getAllTasksAction(response));
+    } else {
+      dispatch(startLoading(false));
+
+      return dispatch(getAllTasksAction([]));
+    }
+  } catch (e) {
+    dispatch(startLoading(false));
+    toast.error("Tasks cannot be retrieved at this time. Please try again later.");
     return dispatch(hasError(e.message));
   }
 };
