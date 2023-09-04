@@ -1,13 +1,14 @@
-import React, { useState } from "react";
+import React from "react";
 import ReactQuill from "react-quill";
 import PropTypes from "prop-types";
 
 import "react-quill/dist/quill.snow.css";
 import "./QuillEditor.css";
 
-const QuillEditor = ({ placeholder, getQuillContent, label, error }) => {
-  const [value, setValue] = useState("");
-  getQuillContent(value);
+const QuillEditor = ({ placeholder, getQuillContent, label, error, ...props }) => {
+  const handleChange = (content) => {
+    getQuillContent(content);
+  };
 
   var toolbarOptions = [
     ["bold", "italic", "underline"], // toggled buttons
@@ -30,11 +31,12 @@ const QuillEditor = ({ placeholder, getQuillContent, label, error }) => {
       {label && <label style={{ fontSize: "14px" }}>{label}</label>}
       <ReactQuill
         theme='snow'
-        onChange={setValue}
+        onChange={() => handleChange()}
         placeholder={placeholder}
         modules={{
           toolbar: toolbarOptions
         }}
+        {...props}
       />
       {error ? (
         <p style={{ color: "#ff5964", fontSize: "14px" }} className='error'>
