@@ -25,16 +25,20 @@ const SetReminder = ({ show, size }) => {
   const dispatch = useDispatch();
 
   const { action, taskData } = useSelector((state) => state.modal.modalData);
-  const [reminder, setReminder] = useState(taskData?.reminder?.status);
+  const [showReminder, setShowReminder] = useState(taskData?.reminder?.status);
 
   const defaultValues = {
-    reminder: action === "create" ? "" : taskData?.reminder?.date || ""
+    reminder: action === "create" ? "" : taskData?.reminder?.date
   };
 
   const createTaskSchema = Yup.object().shape({
-    reminder: Yup.date().when(["dueDate"], (dueDate, schema) =>
-      schema.min(new Date(), "Reminder date must be greater than the current date and time")
-    )
+    reminder: Yup.date()
+      .nullable()
+      .when(
+        ["showReminder"],
+        (showReminder, schema) =>
+          showReminder && schema.min(new Date(), "Reminder date must be greater than the current date and time")
+      )
   });
 
   const resolver = yupResolver(createTaskSchema);
@@ -55,7 +59,7 @@ const SetReminder = ({ show, size }) => {
       updatedAt: `${new Date()}`,
       dueDate: taskData?.dueDate,
       reminder: {
-        status: reminder,
+        status: showReminder,
         date: data.reminder
       }
     };
@@ -96,13 +100,13 @@ const SetReminder = ({ show, size }) => {
                 <label htmlFor='reminder'>Set Reminder</label>
                 <input
                   type='checkbox'
-                  name='reminder'
-                  id='reminder'
-                  onChange={(e) => setReminder(e.target.checked)}
-                  checked={taskData?.reminder?.status}
+                  name='showReminder'
+                  id='showReminder'
+                  onChange={(e) => setShowReminder(e.target.checked)}
+                  checked={showReminder}
                 />
               </div>
-              {reminder && (
+              {showReminder && (
                 <Controller
                   name='reminder'
                   control={control}

@@ -37,7 +37,7 @@ $animation-duration: 2s;
   width: $size;
   position: relative;
   transform-origin: 0 0;
-  transform: translateX(0) translateY(0) translateZ(-$size/2);
+  transform: translateX(0) translateY(0) translateZ(calc(-1 * $size / 2));
 }
 
 .cube-face {
@@ -78,7 +78,7 @@ $animation-duration: 2s;
     animation-timing-function: cubic-bezier(0.17, 0.84, 0.44, 1);
   }
   50% {
-    transform: rotateX($start) rotateY(0) rotateZ($start + 360/2);
+    transform: rotateX($start) rotateY(0) rotateZ($start + calc(360 / 2));
     animation-timing-function: cubic-bezier(0.76, 0.05, 0.86, 0.06);
   }
   100% {
