@@ -55,6 +55,7 @@
       flex-direction: column;
       gap: 1.5rem;
       align-self: flex-start;
+
       a {
         display: flex;
         align-items: center;
@@ -67,16 +68,16 @@
         white-space: nowrap;
 
         &:hover {
-          color: #a60473 !important;
+          color: var(--primaryColor) !important;
         }
       }
 
       a:has(.active) {
-        color: #a60473;
+        color: var(--primaryColor);
       }
 
       .active {
-        color: #a60473 !important;
+        color: var(--primaryColor) !important;
         &::after {
           content: "";
           position: absolute;

@@ -80,16 +80,32 @@ const NavBar = () => {
             />
             {isMobile && (
               <>
-                <NavLink onClick={handleMenuClick} to='/new-tasks'>
+                <NavLink
+                  className={(navData) => navData.isActive && cx(styles.active)}
+                  onClick={handleMenuClick}
+                  to='/new-tasks'
+                >
                   New Tasks
                 </NavLink>
-                <NavLink onClick={handleMenuClick} to='/completed-tasks'>
+                <NavLink
+                  className={(navData) => navData.isActive && cx(styles.active)}
+                  onClick={handleMenuClick}
+                  to='/completed-tasks'
+                >
                   Completed Tasks
                 </NavLink>
-                <NavLink onClick={handleMenuClick} to='/uncompleted-tasks'>
+                <NavLink
+                  className={(navData) => navData.isActive && cx(styles.active)}
+                  onClick={handleMenuClick}
+                  to='/uncompleted-tasks'
+                >
                   Uncompleted Tasks
                 </NavLink>
-                <NavLink onClick={handleMenuClick} to='/deleted-tasks'>
+                <NavLink
+                  className={(navData) => navData.isActive && cx(styles.active)}
+                  onClick={handleMenuClick}
+                  to='/deleted-tasks'
+                >
                   Deleted Tasks
                 </NavLink>
               </>
