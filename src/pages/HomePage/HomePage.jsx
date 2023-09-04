@@ -87,7 +87,7 @@ const HomePage = () => {
 
             const toastData = {
               headerMessage: "Due Reminder Notification",
-              message: `${task.title} is due on ${formatDate(task.reminder.date)}`
+              message: `${task.title} is due on ${formatDate(task.dueDate)}`
             };
 
             const ToastMessage = () => {
