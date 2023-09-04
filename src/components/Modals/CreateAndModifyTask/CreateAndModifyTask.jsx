@@ -13,7 +13,7 @@ import styles from "./CreateAndModifyTask.module.scss";
 
 import Button from "@/components/Button/Button";
 import Input from "@/components/FixedLabelInput/FixedLabelInput";
-import TextArea from "@/components/TextArea/TextArea";
+import QuillEditor from "@/components/QuillEditor/QuillEditor";
 
 import { hideModal } from "@/redux/Modal/ModalSlice";
 import { createTask, getCompletedTasks, getNewTasks, getUncompletedTasks, modifyTask } from "@/redux/Tasks/TasksSlice";
@@ -52,7 +52,8 @@ const CreateAndModifyTask = ({ show, size }) => {
   const {
     handleSubmit,
     formState: { errors },
-    control
+    control,
+    setValue
   } = useForm({ defaultValues, resolver, mode: "all" });
 
   const handleFormSubmission = async (data) => {
@@ -87,6 +88,10 @@ const CreateAndModifyTask = ({ show, size }) => {
     dispatch(hideModal({ name: "createTask" }));
   };
 
+  const getQuillContent = (data) => {
+    setValue("description", data);
+  };
+
   return (
     <ModalContainer show={show} size={size}>
       <div className={cx(styles.modalWrapper, "flexCol")}>
@@ -113,21 +118,22 @@ const CreateAndModifyTask = ({ show, size }) => {
               )}
             />
 
-            <Controller
-              name='description'
-              control={control}
-              render={({ field }) => (
-                <TextArea
-                  {...field}
-                  label='Description'
-                  placeholder='Enter Description...'
-                  minHeight='150px'
-                  error={errors?.description && errors?.description?.message}
-                  borderColor='none'
-                />
-              )}
-            />
-
+            <div className={cx(styles.quillEditorDiv)}>
+              <Controller
+                name='description'
+                control={control}
+                render={({ field }) => (
+                  <QuillEditor
+                    {...field}
+                    label='Description'
+                    placeholder='Enter Description'
+                    getQuillContent={getQuillContent}
+                    error={errors?.description && errors?.description?.message}
+                    className={cx(styles.quillNew)}
+                  />
+                )}
+              />
+            </div>
             <Controller
               name='dueDate'
               control={control}

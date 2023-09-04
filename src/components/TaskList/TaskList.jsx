@@ -1,4 +1,5 @@
 import React from "react";
+import ReactHtmlParser from "react-html-parser";
 import { useDispatch } from "react-redux";
 import { useLocation } from "react-router-dom";
 import cx from "classnames";
@@ -106,7 +107,7 @@ const TaskList = ({ data }) => {
       {currentPath !== "deleted-tasks" && <Icon icon='arcticons:hourlyreminder' onClick={handleReminder} />}
       <header className={"flexCol"}>
         <h5 className={cx(styles.title)}>{data?.title}</h5>
-        <p className={cx(styles.description)}>{data?.description}</p>
+        <p className={cx(styles.description)}>{data?.description ? ReactHtmlParser(data?.description) : ""}</p>
         <span className={cx(styles.dueDate)}>{`Due Date:  ${formatDate(data?.dueDate)}`}</span>
       </header>
 
