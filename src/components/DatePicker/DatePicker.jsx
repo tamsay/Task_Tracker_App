@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import PropTypes from "prop-types";

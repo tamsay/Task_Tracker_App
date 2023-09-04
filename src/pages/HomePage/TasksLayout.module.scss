@@ -1,11 +1,42 @@
 .tasksContainer {
   height: 100%;
 
+  .viewToggler {
+    gap: 1rem;
+    align-items: center;
+    margin-bottom: 1rem;
+
+    .isActive {
+      path {
+        fill: var(--primaryColor);
+      }
+    }
+
+    svg {
+      cursor: pointer;
+      fill: var(--green7);
+    }
+  }
+
   .tasksList {
+    gap: 1rem;
+  }
+
+  .gridView {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
     gap: 1rem;
   }
 
   .emptyDiv {
     height: 100%;
+  }
+}
+
+@media all and (min-width: 1200px) {
+  .tasksContainer {
+    .gridView {
+      grid-template-columns: repeat(3, 1fr);
+    }
   }
 }

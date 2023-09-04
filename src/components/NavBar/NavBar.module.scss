@@ -1,5 +1,5 @@
 .navbarContainer {
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 1rem !important;
   margin: 0rem;
   justify-content: space-between;
   width: 100%;
@@ -7,16 +7,19 @@
   background-color: #fcfcfc;
 
   .siteLogo {
+    display: flex;
     justify-content: flex-start;
     align-items: center;
     z-index: 10;
+    gap: 0.5rem;
 
     svg {
-      //   width: clamp(4rem, 7vw, 6rem);
-      width: auto;
-      height: var(--topNavbarHeight);
-      object-fit: contain;
+      // width: clamp(4rem, 7vw, 6rem);
+      width: 2.5rem;
+      height: auto;
+      object-fit: cover;
       padding: 0.5rem 0rem 0.5rem 0rem;
+      margin-right: 0.25rem;
     }
   }
 
@@ -88,7 +91,7 @@
 
 @media all and (min-width: 768px) {
   .navbarContainer {
-    padding: 0.5rem 2rem;
+    padding: 0.5rem 2rem !important;
 
     .navbarCollapse {
       padding: 3rem 3rem;
@@ -114,7 +117,7 @@
 
 @media all and (min-width: 992px) {
   .navbarContainer {
-    padding: 0.5rem 3rem 1rem 3rem;
+    padding: 0.5rem 4rem 1rem 4rem !important;
     justify-content: space-between;
     height: inherit;
 
@@ -162,7 +165,7 @@
 
 @media all and (min-width: 1200px) {
   .navbarContainer {
-    padding: 1rem 4rem;
+    padding: 1rem 4rem !important;
 
     .navbarCollapse {
       .primaryNavigation {

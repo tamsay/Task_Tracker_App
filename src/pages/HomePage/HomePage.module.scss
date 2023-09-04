@@ -1,6 +1,5 @@
 .homepageContainer {
   padding: 1rem;
-  // background-color: var(--gray10);
   gap: 1rem;
   height: calc(100dvh - var(--topNavbarHeight));
   width: 100%;
@@ -21,7 +20,6 @@
     gap: 1rem;
     border: 1px solid var(--grayBorderColor);
     padding: 0 0rem 0 0;
-    border-radius: 0.5rem;
   }
 }
 

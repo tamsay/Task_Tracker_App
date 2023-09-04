@@ -147,7 +147,6 @@ export const deleteTask = (data) => async (dispatch) => {
     );
   } catch (e) {
     toast.error("Task could not be deleted at this time. Please try again later.");
-    console.log(e);
     return dispatch(hasError(e.message));
   }
 };
@@ -182,7 +181,6 @@ export const modifyTask = (data) => async (dispatch) => {
 export const updateTaskStatus = (data) => async (dispatch) => {
   try {
     dispatch(startLoading());
-    console.log(data, "update date");
 
     // retrieve current data from local storage
     let appData = JSON.parse(localStorage.getItem("appData"));
@@ -205,7 +203,6 @@ export const updateTaskStatus = (data) => async (dispatch) => {
     );
   } catch (e) {
     toast.error("Task status could not be updated at this time. Please try again later.");
-    console.log(e);
     return dispatch(hasError(e.message));
   }
 };
@@ -333,7 +330,6 @@ export const updateReminderStatus = (data) => async (dispatch) => {
     );
   } catch (e) {
     toast.error("Reminder status could not be updated at this time. Please try again later.");
-    console.log(e);
     return dispatch(hasError(e.message));
   }
 };
